@@ -31,33 +31,47 @@ float interest(float t,float amount,int rate)
 
 }
     
-int main_exit;
-    
+int main_exit; 
+
+int invalid();   
 int login();
 void menu();
 void create_acc();
 void edit();
 void transact();
-void View();
+void view();
 void Remove();
 void view_list();
 void close();
 
-int main(){
-	login();
+int invalid(){
 
-	return 0;
+	printf("\nEnter 0 to try again,1 to return to main menu and 2 to exit:");
+	scanf("%d",&main_exit);
+    system("cls");
+    if (main_exit==1){
+		menu();
+	}
+    else if (main_exit==2){
+    	close();
+	}
+    else if(main_exit==0){
+    	edit();}
+    else{
+		printf("\nInvalid!\a");
+		invalid();      
+	}
 }
 
-int login()
-{
-    char user_nam[50],user_name[50]="admin";
+
+int main(){
+	char user_nam[50],user_name[50]="admin";
 	char pass[10],password[10]="1234";
     int i=0;
     printf("\n\n\tEnter the username to login:");
     scanf("%s",user_nam);
     if (strcmp(user_nam,user_name)==0){
-//        {printf("\n\nUsername Match!");
+
 	}
 
     else
@@ -79,22 +93,16 @@ int login()
             else
                     {printf("\nInvalid!");
                     system("cls");
-                    login();
+                    main();
 					}
 
         }
     printf("\n\n\tEnter the password to login:");
-    scanf("%s",pass);
-    /*do
-    {
-    //if (pass[i]!=13&&pass[i]!=8)
-        {
-            printf("*");
-            pass[i]=getch();
-            i++;
-        }
-    }while (pass[i]!=13);
-    pass[10]='\0';*/
+    for(i=0;i<4;i++){
+   		pass[i]= getch();
+   		printf("*");
+	}
+	pass[i]='\0';
     if (strcmp(pass,password)==0)
         {printf("\n\nLogin successfully!!!");
         system("cls");
@@ -119,11 +127,12 @@ int login()
             else
                     {printf("\nInvalid!");
                     system("cls");
-                    login();
+                    main();
 					}
 //
         }
         return 0;
+
 }
 void menu(void)
 {   int choice;
@@ -136,7 +145,6 @@ void menu(void)
 	printf("\n\n\t\tEnter your choice:");    
 	scanf("%d",&choice);
 	system("cls");
-	create_acc();
     system("cls");
     switch(choice)
     {
@@ -146,7 +154,7 @@ void menu(void)
         break;
         case 3:transact();
         break;
-        case 4:View();
+        case 4:view();
         break;
         case 5:Remove();
         break;
@@ -171,7 +179,7 @@ void create_acc(){
     {
         if (check.acc_no==add.acc_no)
             {printf("Account no. already in use!");
-                create_acc();
+                invalid();
 
             }
     }
@@ -198,19 +206,7 @@ void create_acc(){
 
     fclose(fptr);
     printf("\nAccount created successfully!");
-//    add_invalid:
-    printf("\n\n\n\t\tEnter 1 to go to the main menu and 0 to exit:");
-    scanf("%d",&main_exit);
-    system("cls");
-    if (main_exit==1)
-        menu();
-    else if(main_exit==0)
-        close();
-    else
-        {
-            printf("\nInvalid!\a");
-//            goto add_invalid;
-        }
+    invalid();
 }
 
 
@@ -258,20 +254,7 @@ void edit(void)
 if(test!=1)
         {   system("cls");
             printf("\nRecord not found!!\a\a\a");
-            edit_invalid:
-              printf("\nEnter 0 to try again,1 to return to main menu and 2 to exit:");
-              scanf("%d",&main_exit);
-              system("cls");
-                 if (main_exit==1)
-
-                    menu();
-                else if (main_exit==2)
-                    close();
-                else if(main_exit==0)
-                    edit();
-                else
-                    {printf("\nInvalid!\a");
-                    goto edit_invalid;}
+			invalid();
         }
     else
         {printf("\n\n\nEnter 1 to go to the main menu and 0 to exit:");
@@ -284,8 +267,9 @@ if(test!=1)
         }
 }
 
-void View(){
-	FILE *ptr;
+void view(void)
+{
+    FILE *ptr;
     int test=0,rate;
     int choice;
     float time;
@@ -396,7 +380,34 @@ void View(){
 
             }
         }
+    }
+
+
+    fclose(ptr);
+     if(test!=1)
+        {   system("cls");
+            printf("\nRecord not found!!\a\a\a");
+            invalid();
+        }
+    else
+        {printf("\nEnter 1 to go to the main menu and 0 to exit:");
+        scanf("%d",&main_exit);}
+        if (main_exit==1)
+        {
+            system("cls");
+            menu();
+        }
+
+        else
+           {
+
+             system("cls");
+            close();
+            }
+
 }
+
+
 
 void transact(void)
 {   int choice,test=0;
@@ -414,7 +425,6 @@ void transact(void)
                 if(strcmpi(add.acc_type,"fixed1")==0||strcmpi(add.acc_type,"fixed2")==0||strcmpi(add.acc_type,"fixed3")==0)
                 {
                     printf("\a\a\a\n\nYOU CANNOT DEPOSIT OR WITHDRAW CASH IN FIXED ACCOUNTS!!!!!");
-                    fordelay(1000000000);
                     system("cls");
                     menu();
 
@@ -451,21 +461,7 @@ void transact(void)
    if(test!=1)
    {
        printf("\n\nRecord not found!!");
-       transact_invalid:
-      printf("\n\n\nEnter 0 to try again,1 to return to main menu and 2 to exit:");
-      scanf("%d",&main_exit);
-      system("cls");
-      if (main_exit==0)
-        transact();
-    else if (main_exit==1)
-        menu();
-    else if (main_exit==2)
-        close();
-    else
-    {
-        printf("\nInvalid!");
-        goto transact_invalid;
-    }
+       invalid();
 
    }
    else
@@ -478,4 +474,67 @@ void transact(void)
         else
             close();
    }
+}
+
+void Remove(){
+	FILE *old,*newrec;
+    int test=0;
+    old=fopen("record.dat","r");
+    newrec=fopen("new.dat","w");
+    printf("Enter the account no. of the customer you want to delete:");
+    scanf("%d",&rem.acc_no);
+    while (fscanf(old,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+   {
+        if(add.acc_no!=rem.acc_no)
+            fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
+
+        else
+            {test++;
+            printf("\nRecord deleted successfully!\n");
+            }
+   }
+   fclose(old);
+   fclose(newrec);
+   remove("record.dat");
+   rename("new.dat","record.dat");
+   if(test==0)
+        {
+            printf("\nRecord not found!!\a\a\a");
+             invalid();
+        }
+    else
+        {printf("\nEnter 1 to go to the main menu and 0 to exit:");
+        scanf("%d",&main_exit);
+        system("cls");
+        if (main_exit==1)
+            menu();
+        else
+            close();
+        }
+
+}
+
+void view_list()
+{
+    FILE *view;
+    view=fopen("record.dat","r");
+    int test=0;
+    system("cls");
+    printf("\nACC. NO.\tNAME\t\t\tADDRESS\t\t\tPHONE\n");
+
+    while(fscanf(view,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+       {
+           printf("\n%6d\t %10s\t\t\t%10s\t\t%.0lf",add.acc_no,add.name,add.address,add.phone);
+           test++;
+       }
+
+    fclose(view);
+    if (test==0)
+        {   system("cls");
+            printf("\nNO RECORDS!!\n");}
+			invalid();
+}
+void close(void)
+{
+    printf("\n\n\n\n\t\tYou have logged out of the system successfully!!!");
 }
